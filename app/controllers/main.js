@@ -2,18 +2,20 @@
 Lấy ds nguoi dungtu back end
 */
 var mangNguoiDung = [];
-$(document).ready(function () {
-
+$(document).ready(function() {
+    function AddNguoidung() {
+        console.log("AddNguoidung");
+    }
     var nguoiDungService = new NguoiDungService();
     var ajaxNguoiDung = nguoiDungService.LayDanhSachNguoiDung();
 
     ajaxNguoiDung
-        .done(function (result) {
+        .done(function(result) {
             mangNguoiDung = result;
             hienthi(mangNguoiDung);
 
         })
-        .fail(function (err) {
+        .fail(function(err) {
             console.log(err);
 
         })
@@ -46,7 +48,7 @@ $(document).ready(function () {
     function hienthi(mangHienThi) {
         var content = "";
         var tableDanhSach = $("#tblDanhSachNguoiDung");
-        mangHienThi.map(function (nguoiDung, index) {
+        mangHienThi.map(function(nguoiDung, index) {
 
             content += `
             <tr>
@@ -65,15 +67,14 @@ $(document).ready(function () {
         tableDanhSach.html(content);
     }
 
-    $("#btnThemNguoiDung").click(function () {
+    $("#btnThemNguoiDung").click(function() {
         $("#modal-title").html("Thêm người dùng");
         var btn = `
     <button class = "btn btn-success" id= "btnThem">Thêm Người Dùng</button>
     `;
         $("#modal-footer").html(btn);
     });
-    $("body").delegate("#btnThem", "click", function()
-    {
+    $("body").delegate("#btnThem", "click", function() {
         // lấy thông tin
         var taiKhoan = $("#TaiKhoan").val();
         var matKhau = $("#MatKhau").val();
@@ -81,36 +82,32 @@ $(document).ready(function () {
         var email = $("#Email").val();
         var soDT = $("#SoDT").val();
         var maLoai = $("#maLoaiNguoiDung").val();
-        
+
 
 
         //Tạo đối tượng
         var nguoiDung = new NguoiDung(taiKhoan, matKhau, hoTen, email, soDT, maLoai)
-        //them vào database(api)
+            //them vào database(api)
         nguoiDungService.ThemNguoiDung(nguoiDung)
-        .done(function(result){
-            location.reload(result);
-            
-        })
-        .fail(function(err){
-            console.log(err);
-            
-        });
+            .done(function(result) {
+                location.reload(result);
+
+            })
+            .fail(function(err) {
+                console.log(err);
+
+            });
     })
 
-    $("body").delegate("#btnXoa", "click", function()
-    {
+    $("body").delegate("#btnXoa", "click", function() {
         var taiKhoan = $(this).data("id");
         nguoiDungService.XoaNguoiDung(taiKhoan)
-        .done (function()
-        {
-            location.reload();
-        })
-        .fail(function(err)
-        {
-            console.log(err);
-            
-        })
-    }
-    )
+            .done(function() {
+                location.reload();
+            })
+            .fail(function(err) {
+                console.log(err);
+
+            })
+    })
 })
